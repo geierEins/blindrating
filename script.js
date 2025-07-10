@@ -4,7 +4,7 @@ let shuffledCards = [];
 let currentCardIndex = 0;
 let placed = [];
 let history = [];
-let itemCount = 12;
+let itemCount = 10;
 
 function toggleMode() {
   if (mode === 'edit') {
@@ -22,20 +22,60 @@ function toggleMode() {
 function updateItemCount(value) {
   itemCount = parseInt(value);
   document.getElementById('item-count-display').textContent = itemCount;
-  generateInputFields();
+  generateInputFields(false); // false: Felder nicht löschen, nur anpassen
 }
 
-function generateInputFields() {
+// Neues Argument: resetFields (default true)
+function generateInputFields(resetFields = true) {
   const container = document.getElementById('input-fields');
-  container.innerHTML = '';
-  for (let i = 0; i < itemCount; i++) {
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.placeholder = `Begriff ${i + 1}`;
-    input.id = `input-${i}`;
-    input.className = 'term-input';
-    container.appendChild(input);
+
+  // Wenn resetFields true, alles löschen & neu erstellen
+  if (resetFields) {
+    container.innerHTML = '';
+    for (let i = 0; i < itemCount; i++) {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = `Begriff ${i + 1}`;
+      input.id = `input-${i}`;
+      input.className = 'term-input';
+      container.appendChild(input);
+    }
+  } else {
+    // Felder anpassen: Wenn mehr, neue hinzufügen, wenn weniger, entfernen
+    const existingInputs = container.querySelectorAll('input.term-input');
+    const existingCount = existingInputs.length;
+
+    if (itemCount > existingCount) {
+      for (let i = existingCount; i < itemCount; i++) {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = `Begriff ${i + 1}`;
+        input.id = `input-${i}`;
+        input.className = 'term-input';
+        container.appendChild(input);
+      }
+    } else if (itemCount < existingCount) {
+      for (let i = existingCount - 1; i >= itemCount; i--) {
+        const inputToRemove = document.getElementById(`input-${i}`);
+        if (inputToRemove) {
+          container.removeChild(inputToRemove);
+        }
+      }
+    }
+
+    // Update Platzhalter & IDs
+    const inputs = container.querySelectorAll('input.term-input');
+    inputs.forEach((input, idx) => {
+      input.placeholder = `Begriff ${idx + 1}`;
+      input.id = `input-${idx}`;
+    });
   }
+}
+
+function clearAllInputs() {
+  const container = document.getElementById('input-fields');
+  const inputs = container.querySelectorAll('input.term-input');
+  inputs.forEach(input => (input.value = ''));
 }
 
 function startGame() {
@@ -132,5 +172,9 @@ function undoLast() {
   showNextCard();
 }
 
-// Initial setup
-generateInputFields();
+// Initial setup: Set slider value & synchronisiere Anzeige + Felder
+window.onload = () => {
+  document.getElementById('item-count-slider').value = itemCount;
+  document.getElementById('item-count-display').textContent = itemCount;
+  generateInputFields();
+};
