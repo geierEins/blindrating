@@ -5,6 +5,7 @@ let currentCardIndex = 0;
 let placed = [];
 let history = [];
 let itemCount = 10;
+let inputsVisible = true;
 
 function toggleMode() {
   if (mode === 'edit') {
@@ -172,9 +173,31 @@ function undoLast() {
   showNextCard();
 }
 
-// Initial setup: Set slider value & synchronisiere Anzeige + Felder
+function toggleInputVisibility() {
+  inputsVisible = !inputsVisible;
+  const container = document.getElementById('input-fields');
+  const inputs = container.querySelectorAll('input.term-input');
+  inputs.forEach(input => {
+    input.type = inputsVisible ? 'text' : 'password';
+  });
+
+  const toggleBtn = document.getElementById('toggle-visibility');
+  if (inputsVisible) {
+    toggleBtn.textContent = '🔓 Begriffe sichtbar';
+  } else {
+    toggleBtn.textContent = '🔒 Begriffe versteckt';
+  }
+}
+
 window.onload = () => {
   document.getElementById('item-count-slider').value = itemCount;
   document.getElementById('item-count-display').textContent = itemCount;
   generateInputFields();
+
+  const container = document.getElementById('input-fields');
+  const inputs = container.querySelectorAll('input.term-input');
+  inputs.forEach(input => (input.type = 'text'));
+
+  const toggleBtn = document.getElementById('toggle-visibility');
+  toggleBtn.textContent = '🔓 Begriffe sichtbar';
 };

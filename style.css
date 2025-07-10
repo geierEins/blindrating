@@ -129,3 +129,13 @@ button {
   display: block;
   margin: 0 auto;
 }
+
+#start-game-button {
+  background-color: #4CAF50; /* schönes Grün */
+  color: white;
+  font-weight: bold;
+}
+
+#start-game-button:hover {
+  background-color: #45a049;
+}
