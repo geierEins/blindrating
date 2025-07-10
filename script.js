@@ -11,7 +11,7 @@ function toggleMode() {
     mode = 'play';
     document.getElementById('edit-mode').style.display = 'none';
     document.getElementById('play-mode').style.display = 'block';
-    prepareRankingButtons();
+    prepareGameBoard();
   } else {
     mode = 'edit';
     document.getElementById('edit-mode').style.display = 'flex';
@@ -66,23 +66,14 @@ function shuffleArray(array) {
   return array;
 }
 
-function prepareRankingButtons() {
-  const container = document.getElementById('rank-buttons');
-  container.innerHTML = '';
-  for (let i = 1; i <= itemCount; i++) {
-    const btn = document.createElement('button');
-    btn.textContent = i;
-    btn.className = 'rank-button';
-    btn.onclick = () => placeCard(i);
-    container.appendChild(btn);
-  }
-
+function prepareGameBoard() {
   const board = document.getElementById('game-board');
   board.innerHTML = '';
   for (let i = 1; i <= itemCount; i++) {
     const li = document.createElement('li');
     li.id = 'slot-' + i;
     li.textContent = i;
+    li.addEventListener('click', () => placeCard(i));
     board.appendChild(li);
   }
 }
@@ -90,7 +81,6 @@ function prepareRankingButtons() {
 function showNextCard() {
   if (currentCardIndex >= shuffledCards.length) {
     document.getElementById('card').textContent = 'Fertig! Dein Ranking steht.';
-    document.getElementById('rank-buttons').style.display = 'none';
     return;
   }
   document.getElementById('card').textContent = shuffledCards[currentCardIndex];
@@ -118,10 +108,11 @@ function placeCard(position) {
 function clearBoard() {
   for (let i = 1; i <= itemCount; i++) {
     const slot = document.getElementById('slot-' + i);
-    slot.textContent = i;
-    slot.classList.remove('filled');
+    if (slot) {
+      slot.textContent = i;
+      slot.classList.remove('filled');
+    }
   }
-  document.getElementById('rank-buttons').style.display = 'flex';
 }
 
 function undoLast() {

@@ -68,11 +68,27 @@ h1 {
   text-align: center;
   width: 300px;
   box-sizing: border-box;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
 }
+
+#game-board li:hover {
+  background-color: #eef;
+}
+
+#game-board li.filled {
+  border-style: solid;
+  border-color: #007bff;
+  background-color: #cce5ff;
+  color: #000;
+}
+
 
 .filled {
   border-style: solid;
-  background: #dff0d8;
+  border-color: #007bff;
+  background-color: #cce5ff; 
+  color: #000;
 }
 
 #card {
@@ -89,24 +105,11 @@ h1 {
   margin-right: auto;
 }
 
-.button-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-
 button {
   padding: 8px 12px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-}
-
-.rank-button {
-  background-color: #5bc0de;
-  color: white;
 }
 
 .mode-button {
@@ -125,11 +128,4 @@ button {
   color: #f0ad4e;
   display: block;
   margin: 0 auto;
-}
-
-#rank-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 5px;
 }
